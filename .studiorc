@@ -1,0 +1,3 @@
+hab pkg install -b \
+  core/git \
+  jarvus/hologit
