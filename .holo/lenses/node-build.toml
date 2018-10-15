@@ -2,8 +2,7 @@
 package = "holo/lens-node-build"
 
 [hololens.node]
-build = "npx webpack --hide-modules"
-output_dir = "./dist/"
+build = "npx --no-install webpack --hide-modules"
 
 [input]
 files = "**"
