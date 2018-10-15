@@ -1,0 +1,4 @@
+[submodule ".holo/sources/leaflet-svgicon"]
+	path = .holo/sources/leaflet-svgicon
+	url = https://github.com/timwis/leaflet-svgicon.git
+	branch = add-package-json
