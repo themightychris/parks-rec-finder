@@ -1,5 +1,6 @@
 [holospec]
 files = [
+  ".holo/lenses",
   "src/**",
   ".babelrc",
   "package.json",
