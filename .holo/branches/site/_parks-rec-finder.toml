@@ -1,0 +1,8 @@
+[holospec]
+files = [
+  "src/**",
+  ".babelrc",
+  "package.json",
+  "index.html",
+  "webpack.config.js"
+]
