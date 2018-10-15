@@ -27,28 +27,41 @@ do_install() {
 #!$(pkg_path_for bash)/bin/sh
 
 INPUT_TREE="\${1?<input> required}"
-NODE_ENV="\${HOLOLENS_NODE_ENV:-production}"
-NODE_INSTALL="\${HOLOLENS_NODE_INSTALL:-npm install --no-progress --quiet --production --no-audit}"
+NODE_INSTALL="\${HOLOLENS_NODE_INSTALL:-npm install --no-progress --quiet --no-audit}"
+NODE_BUILD_ENV="\${HOLOLENS_NODE_BUILD_ENV:-production}"
 NODE_BUILD="\${HOLOLENS_NODE_BUILD:-npm run build}"
+OUTPUT_DIR="\${HOLOLENS_NODE_OUTPUT_DIR:-dist}"
 
 # redirect all output to stderr
-#{
+{
+  # prepare persistant NPM cache
+  mkdir -p /hab/cache/artifacts/studio_cache/npm
+  export npm_config_cache="/hab/cache/artifacts/studio_cache/npm"
+
   # export git tree to disk
   git holo lens export-tree "\${INPUT_TREE}"
 
-  # execute compilation
+  # execute build
   pushd "\${GIT_WORK_TREE}" > /dev/null
-  export NODE_ENV
+
+  export CI="true"
+
+  echo
+  echo "Running: \${NODE_INSTALL}"
   \${NODE_INSTALL}
-  \${NODE_BUILD}
+
+  echo
+  echo "Running: NODE_ENV=\"\${NODE_BUILD_ENV}\" \${NODE_BUILD}"
+  NODE_ENV="\${NODE_BUILD_ENV}" \${NODE_BUILD}
+
   popd > /dev/null
 
   # add output to git index
-  git add dist
-#} 1>&2
+  git add "\${OUTPUT_DIR}"
+} 2>&1
 
 # output tree hash
-git write-tree --prefix=dist
+git write-tree --prefix="\${OUTPUT_DIR}"
 
 EOM
   chmod +x "bin/lens-tree"
