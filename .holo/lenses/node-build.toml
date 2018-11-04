@@ -6,3 +6,6 @@ build = "npx --no-install webpack --hide-modules"
 
 [input]
 files = "**"
+
+[output]
+merge = "replace"
